@@ -12,78 +12,38 @@ public class RegistrationCountTest {
     @Test
     public void baseRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new Object();
-            }
-        });
+        SimpleLocator.getInstance().register(Object.class, Object::new);
         assertEquals(1, SimpleLocator.getInstance().getRegistrationCount());
     }
 
     @Test
     public void singletonRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new Object();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(Object.class, Object::new);
         assertEquals(1, SimpleLocator.getInstance().getRegistrationCount());
     }
 
     @Test
     public void combinedRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new Object();
-            }
-        });
-        SimpleLocator.getInstance().registerSingleton(String.class, new ObjectFactory<String>() {
-            @Override
-            public String build() {
-                return "";
-            }
-        });
+        SimpleLocator.getInstance().register(Object.class, Object::new);
+        SimpleLocator.getInstance().registerSingleton(String.class, () -> "");
         assertEquals(2, SimpleLocator.getInstance().getRegistrationCount());
     }
 
     @Test
     public void sameRegistration_doesnt_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteA();
-            }
-        });
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().register(Object.class, MyConcreteA::new);
+        SimpleLocator.getInstance().register(Object.class, MyConcreteB::new);
         assertEquals(1, SimpleLocator.getInstance().getRegistrationCount());
     }
 
     @Test
     public void mixedRegistration_doesnt_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteA();
-            }
-        });
-        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().register(Object.class, MyConcreteA::new);
+        SimpleLocator.getInstance().registerSingleton(Object.class, MyConcreteB::new);
         assertEquals(1, SimpleLocator.getInstance().getRegistrationCount());
     }
 
@@ -91,19 +51,9 @@ public class RegistrationCountTest {
     public void mixedRegistration_doesnt_increase_reverse() {
         SimpleLocator.getInstance().clear();
 
-        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(Object.class, MyConcreteB::new);
 
-        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new MyConcreteA();
-            }
-        });
+        SimpleLocator.getInstance().register(Object.class, MyConcreteA::new);
 
         assertEquals(1, SimpleLocator.getInstance().getRegistrationCount());
     }

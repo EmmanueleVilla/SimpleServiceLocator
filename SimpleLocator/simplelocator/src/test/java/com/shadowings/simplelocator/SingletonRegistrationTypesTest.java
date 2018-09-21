@@ -14,12 +14,7 @@ public class SingletonRegistrationTypesTest {
     public void selfRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
-            @Override
-            public Object build() {
-                return new Object();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(Object.class, Object::new);
         assertTrue(SimpleLocator.getInstance().get(Object.class) != null);
     }
 
@@ -27,12 +22,7 @@ public class SingletonRegistrationTypesTest {
     public void interfaceRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteA();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteA::new);
         assertTrue(SimpleLocator.getInstance().get(MyInterface.class) instanceof MyConcreteA);
     }
 
@@ -40,18 +30,8 @@ public class SingletonRegistrationTypesTest {
     public void interfaceRegistration_lastOneCounts()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteA();
-            }
-        });
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteA::new);
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteB::new);
         assertTrue(SimpleLocator.getInstance().get(MyInterface.class) instanceof MyConcreteB);
     }
 
@@ -59,12 +39,7 @@ public class SingletonRegistrationTypesTest {
     public void sameInstance()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteA();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteA::new);
         MyInterface one = SimpleLocator.getInstance().get(MyInterface.class);
         MyInterface two = SimpleLocator.getInstance().get(MyInterface.class);
         assertTrue(one == two);
@@ -74,6 +49,6 @@ public class SingletonRegistrationTypesTest {
     public void noRegistration()
     {
         SimpleLocator.getInstance().clear();
-        Object obj = SimpleLocator.getInstance().get(Object.class);
+        SimpleLocator.getInstance().get(Object.class);
     }
 }

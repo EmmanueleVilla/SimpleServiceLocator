@@ -15,19 +15,9 @@ public class MixedRegistrationTypesTest {
     {
         SimpleLocator.getInstance().clear();
 
-        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteA();
-            }
-        });
+        SimpleLocator.getInstance().register(MyInterface.class, MyConcreteA::new);
 
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteB::new);
 
         MyInterface one = SimpleLocator.getInstance().get(MyInterface.class);
         MyInterface two = SimpleLocator.getInstance().get(MyInterface.class);
@@ -40,19 +30,9 @@ public class MixedRegistrationTypesTest {
     {
         SimpleLocator.getInstance().clear();
 
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteA();
-            }
-        });
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteA::new);
 
-        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
-            @Override
-            public MyInterface build() {
-                return new MyConcreteB();
-            }
-        });
+        SimpleLocator.getInstance().register(MyInterface.class, MyConcreteB::new);
 
         MyInterface one = SimpleLocator.getInstance().get(MyInterface.class);
         MyInterface two = SimpleLocator.getInstance().get(MyInterface.class);
