@@ -1,5 +1,5 @@
 package com.shadowings.simplelocator;
 
-public interface IObjectFactory<T> {
+public interface ObjectFactory<T> {
     T build();
 }

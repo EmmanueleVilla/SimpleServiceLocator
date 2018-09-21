@@ -12,7 +12,7 @@ public class RegistrationCountTest {
     @Test
     public void baseRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new Object();
@@ -24,7 +24,7 @@ public class RegistrationCountTest {
     @Test
     public void singletonRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new Object();
@@ -36,13 +36,13 @@ public class RegistrationCountTest {
     @Test
     public void combinedRegistration_count_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new Object();
             }
         });
-        SimpleLocator.getInstance().registerSingleton(String.class, new IObjectFactory<String>() {
+        SimpleLocator.getInstance().registerSingleton(String.class, new ObjectFactory<String>() {
             @Override
             public String build() {
                 return "";
@@ -54,13 +54,13 @@ public class RegistrationCountTest {
     @Test
     public void sameRegistration_doesnt_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteA();
             }
         });
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteB();
@@ -72,13 +72,13 @@ public class RegistrationCountTest {
     @Test
     public void mixedRegistration_doesnt_increase() {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteA();
             }
         });
-        SimpleLocator.getInstance().registerSingleton(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteB();
@@ -91,14 +91,14 @@ public class RegistrationCountTest {
     public void mixedRegistration_doesnt_increase_reverse() {
         SimpleLocator.getInstance().clear();
 
-        SimpleLocator.getInstance().registerSingleton(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteB();
             }
         });
 
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new MyConcreteA();

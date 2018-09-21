@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.shadowings.core.MainViewModel;
-import com.shadowings.core.MySampleInterface;
-import com.shadowings.simplelocator.IObjectFactory;
-import com.shadowings.simplelocator.SimpleLocator;
 
 public class MainActivity extends AppCompatActivity {
 

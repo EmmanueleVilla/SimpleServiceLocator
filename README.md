@@ -21,7 +21,7 @@ Define the association:
 ```
 SimpleLocator.getInstance().register(
     MySampleInterface.class,
-    new IObjectFactory<MySampleInterface>() {
+    new ObjectFactory<MySampleInterface>() {
         @Override
         public MySampleInterface build() {
             return new MySampleConcreteClass();

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class SimpleLocator implements ISimpleLocator {
 
-    private HashMap<String, IObjectFactory<?>> factoriesMap;
+    private HashMap<String, ObjectFactory<?>> factoriesMap;
     private HashMap<String, Object> singletonsMap;
 
     private static SimpleLocator instance;
@@ -38,25 +38,14 @@ public class SimpleLocator implements ISimpleLocator {
         throw new IllegalArgumentException("Don't know how to create an instance of " + type.getName());
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T baseGet(Class<T> type) {
-        IObjectFactory<T> factory = (IObjectFactory<T>) factoriesMap.get(type.getName());
-        return factory.build();
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T singletonGet(Class<T> type) {
-        return (T)singletonsMap.get(type.getName());
-    }
-
     @Override
-    public <T> void register(Class<T> type, IObjectFactory<T> factory) {
+    public <T> void register(Class<T> type, ObjectFactory<T> factory) {
         unregister(type);
         factoriesMap.put(type.getName(), factory);
     }
 
     @Override
-    public <T> void registerSingleton(Class<T> type, IObjectFactory<T> factory) {
+    public <T> void registerSingleton(Class<T> type, ObjectFactory<T> factory) {
         unregister(type);
         singletonsMap.put(type.getName(), factory.build());
     }
@@ -73,16 +62,6 @@ public class SimpleLocator implements ISimpleLocator {
         return isBaseRegistered(type) || isSingletonRegistered(type);
     }
 
-    private <T> boolean isBaseRegistered(Class<T> type) {
-        String key = type.getName();
-        return factoriesMap.containsKey(key);
-    }
-
-    private <T> boolean isSingletonRegistered(Class<T> type) {
-        String key = type.getName();
-        return singletonsMap.containsKey(key);
-    }
-
     @Override
     public void clear() {
         factoriesMap.clear();
@@ -92,5 +71,26 @@ public class SimpleLocator implements ISimpleLocator {
     @Override
     public int getRegistrationCount() {
         return factoriesMap.size() + singletonsMap.size();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T baseGet(Class<T> type) {
+        ObjectFactory<T> factory = (ObjectFactory<T>) factoriesMap.get(type.getName());
+        return factory.build();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T singletonGet(Class<T> type) {
+        return (T)singletonsMap.get(type.getName());
+    }
+
+    private <T> boolean isBaseRegistered(Class<T> type) {
+        String key = type.getName();
+        return factoriesMap.containsKey(key);
+    }
+
+    private <T> boolean isSingletonRegistered(Class<T> type) {
+        String key = type.getName();
+        return singletonsMap.containsKey(key);
     }
 }

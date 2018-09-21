@@ -15,7 +15,7 @@ public class BaseRegistrationTypesTest {
     public void selfRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().register(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new Object();
@@ -28,7 +28,7 @@ public class BaseRegistrationTypesTest {
     public void interfaceRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();
@@ -41,13 +41,13 @@ public class BaseRegistrationTypesTest {
     public void interfaceRegistration_lastOneCounts()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();
             }
         });
-        SimpleLocator.getInstance().register(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteB();
@@ -60,7 +60,7 @@ public class BaseRegistrationTypesTest {
     public void newInstance()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().register(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().register(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();

@@ -14,7 +14,7 @@ public class SingletonRegistrationTypesTest {
     public void selfRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(Object.class, new IObjectFactory<Object>() {
+        SimpleLocator.getInstance().registerSingleton(Object.class, new ObjectFactory<Object>() {
             @Override
             public Object build() {
                 return new Object();
@@ -27,7 +27,7 @@ public class SingletonRegistrationTypesTest {
     public void interfaceRegistration()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();
@@ -40,13 +40,13 @@ public class SingletonRegistrationTypesTest {
     public void interfaceRegistration_lastOneCounts()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();
             }
         });
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteB();
@@ -59,7 +59,7 @@ public class SingletonRegistrationTypesTest {
     public void sameInstance()
     {
         SimpleLocator.getInstance().clear();
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new IObjectFactory<MyInterface>() {
+        SimpleLocator.getInstance().registerSingleton(MyInterface.class, new ObjectFactory<MyInterface>() {
             @Override
             public MyInterface build() {
                 return new MyConcreteA();
