@@ -9,7 +9,7 @@ SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.o
 - Unit test friendly (see below 'Best practices')
 - Basic and singleton registration
 
- [ ![Download](https://api.bintray.com/packages/shadowings/SimpleLocator/com.shadowings.simplelocator/images/download.svg) ](https://bintray.com/shadowings/SimpleLocator/com.shadowings.simplelocator/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/willyrs/SimpleLocator/com.shadowings.simplelocator/images/download.svg) ](https://bintray.com/willyrs/SimpleLocator/com.shadowings.simplelocator/_latestVersion)
 
 ### Basic usage
 Your interface
