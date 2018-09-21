@@ -136,6 +136,6 @@ public class MainViewModel {
 }
 ```
 
-The sample app within the repository gives an example of this project structure
+The sample app within the repository gives an example of this project structure:
 
-![SampleApp](https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-9/42245231_10217915276861723_1092265262033403904_n.jpg?_nc_cat=106&oh=900e738970ddcfc9241be3b10bf4cea6&oe=5C1D6BC2)
+![SampleApp](https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-9/42394639_10217915313382636_4814971922968215552_n.jpg?_nc_cat=103&oh=8026cef86509d9ef7a7ef347247bd814&oe=5C284B0D)
