@@ -1,5 +1,5 @@
 # SimpleLocator
-Simple locator is a lightweight and fast [Service Locator](https://en.wikipedia.org/wiki/Service_locator_pattern) library for android that took inspiration from [Splat](https://github.com/reactiveui/splat) for Xamarin.
+SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.org/wiki/Service_locator_pattern) library for android that took inspiration from [Splat](https://github.com/reactiveui/splat) for Xamarin.
 
 #### Basic usage
 Create the interface
