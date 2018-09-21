@@ -1,14 +1,24 @@
 # SimpleLocator
-SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.org/wiki/Service_locator_pattern) library for android that took inspiration from [Splat](https://github.com/reactiveui/splat) for Xamarin.
+SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.org/wiki/Service_locator_pattern) library for android that took inspiration from [Splat](https://github.com/reactiveui/splat) for Xamarin.<br>
+- No reflection
+- No generated code
+- No annotation
+- Simple to setup, simple to use: just initialize its rules and you are ready to go!
+- Ability to add, modify and remove rules at runtime
+- No need to add work to have it working in a multiple modules project (see below 'Multi Module Project')
+- Unit test friendly (see below 'Best practices')
+- Basic and singleton registration
 
-#### Basic usage
-Create the interface
+ [ ![Download](https://api.bintray.com/packages/shadowings/SimpleLocator/com.shadowings.simplelocator/images/download.svg) ](https://bintray.com/shadowings/SimpleLocator/com.shadowings.simplelocator/_latestVersion)
+
+### Basic usage
+Your interface
 ```
 public interface MySampleInterface {
     String getMessage();
 }
 ```
-Create concrete class
+Your concrete class
 ```
 public class MySampleConcreteClass implements MySampleInterface {
     @Override
@@ -17,7 +27,7 @@ public class MySampleConcreteClass implements MySampleInterface {
     }
 }
 ```
-Define the association:
+Define the rule:
 ```
 SimpleLocator.getInstance().register(
     MySampleInterface.class,
@@ -29,7 +39,7 @@ SimpleLocator.getInstance().register(
     }
 );
 ```
-If you are using java 8, the registration is very simple:
+If you are using java 8, the rule is very simple:
 ```
 SimpleLocator.getInstance().register(
     MySampleInterface.class,
@@ -40,7 +50,14 @@ Retrieve the concrete class
 ```
 MySampleInterface concrete = SimpleLocator.getInstance().get(MySampleInterface.class);
 ```
-#### Singleton
+Of course, you can also register a class to itself
+```
+SimpleLocator.getInstance().register(
+    MySampleConcreteClass.class,
+    MySampleConcreteClass::new
+);
+```
+### Singleton
 In the same way, one can register a class to be a singleton:
 ```
 SimpleLocator.getInstance().registerSingleton(
@@ -50,7 +67,7 @@ SimpleLocator.getInstance().registerSingleton(
 ```
 In this way, SimpleLocator will always return the same instance of MySampleConcreteClass
 
-#### Multiple Registration
+### Multiple Registration
 If you register the same class more times, SimpleLocator will consider only the last one
 ```
 SimpleLocator.getInstance().register(
@@ -64,14 +81,14 @@ SimpleLocator.getInstance().register(
 MySampleInterface concrete = SimpleLocator.getInstance().get(MySampleInterface.class);
 assertTrue(concrete instanceof MyOtherSampleConcreteClass)
 ```
-#### Multi Module Project
+### Multi Module Project
 SimpleLocator is particulary useful when you have a project with more than one module that aren't in a circular dependency (and that's the reason it was created!)
 For example, suppose that you need to develop an application for mobile and wear. <br>You probably will have this module configuration:
 - An App module
 - A Wear module
 - An android library module for the common code
 
-SimpleLocator makes a joke declaring an interface in the library module and use its methods while the concrete class is declared in the specific platform module!<br>
+SimpleLocator makes easy declaring an interface in the library module and use its methods while the concrete class is declared in the specific platform module!<br>
 You just need to create `MyInterface` in the library module and create `MyWearImpl` and `MyAppImpl` in the respective modules. Then, in the application startup, simply register them as seen previously!<br>
 ```
 //App module
@@ -89,3 +106,38 @@ SimpleLocator.getInstance().register(
 //Library module will have the correct implementation
 MyInterface concrete = SimpleLocator.getInstance().get(MyInterface.class);
 ```
+### Best practices
+Using SimpleLocator doesn't mean that it's hard to mock your dependencies: to have it working alongside unit tests, consider to write your classes something like this:
+```
+public class MainViewModel {
+
+    private MySampleInterface mySampleInterface;
+
+    //use the empty constructor in the application to take the dependencies from SimpleLocator
+    public MainViewModel()
+    {
+        InitDependencies(SimpleLocator.getInstance().get(MySampleInterface.class));
+    }
+
+    //use the explicit constructor in the application tests to mock the class dependencies
+    public MainViewModel(MySampleInterface mySampleInterface)
+    {
+        InitDependencies(mySampleInterface);
+    }
+
+    private void InitDependencies(MySampleInterface mySampleInterface)
+    {
+        this.mySampleInterface = mySampleInterface;
+    }
+
+    public String getMessage()
+    {
+        //we are executing the concrete class from the other module without depend on it, yay!
+        return this.mySampleInterface.getMessage();
+    }
+}
+```
+
+The sample app within the repository gives an example of this project structure:
+
+![SampleApp](https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-9/42394639_10217915313382636_4814971922968215552_n.jpg?_nc_cat=103&oh=8026cef86509d9ef7a7ef347247bd814&oe=5C284B0D)
