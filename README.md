@@ -10,13 +10,13 @@ SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.o
 - Basic and singleton registration
 
 #### Basic usage
-Create the interface
+Your interface
 ```
 public interface MySampleInterface {
     String getMessage();
 }
 ```
-Create concrete class
+Your concrete class
 ```
 public class MySampleConcreteClass implements MySampleInterface {
     @Override
@@ -25,7 +25,7 @@ public class MySampleConcreteClass implements MySampleInterface {
     }
 }
 ```
-Define the association:
+Define the rule:
 ```
 SimpleLocator.getInstance().register(
     MySampleInterface.class,
@@ -37,7 +37,7 @@ SimpleLocator.getInstance().register(
     }
 );
 ```
-If you are using java 8, the registration is very simple:
+If you are using java 8, the rule is very simple:
 ```
 SimpleLocator.getInstance().register(
     MySampleInterface.class,
@@ -47,6 +47,13 @@ SimpleLocator.getInstance().register(
 Retrieve the concrete class
 ```
 MySampleInterface concrete = SimpleLocator.getInstance().get(MySampleInterface.class);
+```
+Of course, you can also register a class to itself
+```
+SimpleLocator.getInstance().register(
+    MySampleConcreteClass.class,
+    MySampleConcreteClass::new
+);
 ```
 #### Singleton
 In the same way, one can register a class to be a singleton:
