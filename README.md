@@ -9,7 +9,7 @@ SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.o
 - Unit test friendly (see below 'Best practices')
 - Basic and singleton registration
 
-#### Basic usage
+### Basic usage
 Your interface
 ```
 public interface MySampleInterface {
@@ -55,7 +55,7 @@ SimpleLocator.getInstance().register(
     MySampleConcreteClass::new
 );
 ```
-#### Singleton
+### Singleton
 In the same way, one can register a class to be a singleton:
 ```
 SimpleLocator.getInstance().registerSingleton(
@@ -65,7 +65,7 @@ SimpleLocator.getInstance().registerSingleton(
 ```
 In this way, SimpleLocator will always return the same instance of MySampleConcreteClass
 
-#### Multiple Registration
+### Multiple Registration
 If you register the same class more times, SimpleLocator will consider only the last one
 ```
 SimpleLocator.getInstance().register(
@@ -79,7 +79,7 @@ SimpleLocator.getInstance().register(
 MySampleInterface concrete = SimpleLocator.getInstance().get(MySampleInterface.class);
 assertTrue(concrete instanceof MyOtherSampleConcreteClass)
 ```
-#### Multi Module Project
+### Multi Module Project
 SimpleLocator is particulary useful when you have a project with more than one module that aren't in a circular dependency (and that's the reason it was created!)
 For example, suppose that you need to develop an application for mobile and wear. <br>You probably will have this module configuration:
 - An App module
@@ -104,7 +104,7 @@ SimpleLocator.getInstance().register(
 //Library module will have the correct implementation
 MyInterface concrete = SimpleLocator.getInstance().get(MyInterface.class);
 ```
-#### Best practices
+### Best practices
 Using SimpleLocator doesn't mean that it's hard to mock your dependencies: to have it working alongside unit tests, consider to write your classes something like this:
 ```
 public class MainViewModel {
