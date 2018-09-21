@@ -1,0 +1,1 @@
+include ':simplelocator', ':core', ':simplelocatordemo', ':simplelocatorsampleapp'
