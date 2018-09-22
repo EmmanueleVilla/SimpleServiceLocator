@@ -2,8 +2,57 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
-version '0.1.1'
+version '0.1.2'
 group 'com.bintray'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName this.version
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.sourceFiles
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 
 publishing {
     publications {
@@ -12,6 +61,9 @@ publishing {
             groupId 'com.shadowings.simplelocator'
             artifactId 'simplelocator'
             version this.version
+
+            artifact sourcesJar
+            artifact javadocJar
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
@@ -44,32 +96,6 @@ bintray {
             name = this.version
             released  = new Date()
         }
-    }
-}
-
-android {
-    compileSdkVersion 28
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 1
-        versionName this.version
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
