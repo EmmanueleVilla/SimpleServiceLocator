@@ -20,10 +20,10 @@ repositories {
     }
 }
 ```
-Add the library to the module gradle file
+Add the library to the module gradle file (check latest version in the badge above)
 ```
 dependencies {
-    implementation 'com.shadowings.simplelocator:simplelocator:0.1.1'
+    implementation 'com.shadowings.simplelocator:simplelocator:VERSION'
 }
 ```
 
