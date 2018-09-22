@@ -11,6 +11,22 @@ SimpleLocator is a lightweight and fast [Service Locator](https://en.wikipedia.o
 
 [ ![Download](https://api.bintray.com/packages/willyrs/SimpleLocator/com.shadowings.simplelocator/images/download.svg) ](https://bintray.com/willyrs/SimpleLocator/com.shadowings.simplelocator/_latestVersion)
 
+### How to import
+Add the repository to the main project gradle file
+```
+repositories {
+    maven {
+        url  "https://dl.bintray.com/willyrs/SimpleLocator" 
+    }
+}
+```
+Add the library to the module gradle file
+```
+dependencies {
+    implementation 'com.shadowings.simplelocator:simplelocator:0.1.1'
+}
+```
+
 ### Basic usage
 Your interface
 ```
