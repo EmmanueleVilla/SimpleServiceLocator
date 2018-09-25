@@ -33,7 +33,7 @@ public class SimpleLocator implements ISimpleLocator {
      * The instance of the class registered in the simple locator associated with the requested type
      */
     @Override
-    public <T> T get(Class<T> type) {
+    public <T> T get(Class<T> type) throws IllegalArgumentException {
         if(isBaseRegistered(type))
         {
             return baseGet(type);
