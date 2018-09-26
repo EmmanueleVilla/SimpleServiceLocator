@@ -13,9 +13,9 @@ public class SimpleLocatorApplication extends Application {
         super.onCreate();
 
         //initialize service locator rules here
-        SimpleLocator.getInstance().register(MySampleInterface.class, MySampleConcreteClass::new);
+        SimpleLocator.register(MySampleInterface.class, MySampleConcreteClass::new);
 
-        SimpleLocator.getInstance().register(MySampleInterface.class, new ObjectFactory<MySampleInterface>() {
+        SimpleLocator.register(MySampleInterface.class, new ObjectFactory<MySampleInterface>() {
             @Override
             public MySampleInterface build() {
                 return new MySampleConcreteClass();

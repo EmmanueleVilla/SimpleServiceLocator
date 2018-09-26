@@ -13,14 +13,14 @@ public class MixedRegistrationTypesTest {
     @Test
     public void base_then_singleton()
     {
-        SimpleLocator.getInstance().clear();
+        SimpleLocator.clear();
 
-        SimpleLocator.getInstance().register(MyInterface.class, MyConcreteA::new);
+        SimpleLocator.register(MyInterface.class, MyConcreteA::new);
 
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteB::new);
+        SimpleLocator.registerSingleton(MyInterface.class, MyConcreteB::new);
 
-        MyInterface one = SimpleLocator.getInstance().get(MyInterface.class);
-        MyInterface two = SimpleLocator.getInstance().get(MyInterface.class);
+        MyInterface one = SimpleLocator.get(MyInterface.class);
+        MyInterface two = SimpleLocator.get(MyInterface.class);
 
         assertTrue(one == two);
     }
@@ -28,14 +28,14 @@ public class MixedRegistrationTypesTest {
     @Test
     public void singleton_then_base()
     {
-        SimpleLocator.getInstance().clear();
+        SimpleLocator.clear();
 
-        SimpleLocator.getInstance().registerSingleton(MyInterface.class, MyConcreteA::new);
+        SimpleLocator.registerSingleton(MyInterface.class, MyConcreteA::new);
 
-        SimpleLocator.getInstance().register(MyInterface.class, MyConcreteB::new);
+        SimpleLocator.register(MyInterface.class, MyConcreteB::new);
 
-        MyInterface one = SimpleLocator.getInstance().get(MyInterface.class);
-        MyInterface two = SimpleLocator.getInstance().get(MyInterface.class);
+        MyInterface one = SimpleLocator.get(MyInterface.class);
+        MyInterface two = SimpleLocator.get(MyInterface.class);
 
         assertTrue(one != two);
     }

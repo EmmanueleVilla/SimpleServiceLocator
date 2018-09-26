@@ -9,7 +9,7 @@ public class MainViewModel {
     //use the empty constructor in the application to take the dependencies from SimpleLocator
     public MainViewModel()
     {
-        InitDependencies(SimpleLocator.getInstance().get(MySampleInterface.class));
+        InitDependencies(SimpleLocator.get(MySampleInterface.class));
     }
 
     //use the explicit constructor in the application tests to mock the class dependencies
