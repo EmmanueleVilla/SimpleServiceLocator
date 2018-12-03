@@ -14,12 +14,8 @@ public class SimpleLocatorApplication extends Application {
 
         //initialize service locator rules here
         SimpleLocator.register(MySampleInterface.class, MySampleConcreteClass::new);
-
-        SimpleLocator.register(MySampleInterface.class, new ObjectFactory<MySampleInterface>() {
-            @Override
-            public MySampleInterface build() {
-                return new MySampleConcreteClass();
-            }
-        });
+        SimpleLocator.register(MySampleInterface.class, MySampleConcreteClass::new);
+        SimpleLocator.register(String.class, "FirstName", () -> "This is the first name string");
+        SimpleLocator.register(String.class, "SecondName", () -> "This is the second name string");
     }
 }

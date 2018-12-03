@@ -7,6 +7,8 @@ import com.shadowings.simplelocator.mocks.MyInterface;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 public class BaseRegistrationTypesTest {
@@ -16,7 +18,7 @@ public class BaseRegistrationTypesTest {
     {
         SimpleLocator.clear();
         SimpleLocator.register(Object.class, Object::new);
-        assertTrue(SimpleLocator.get(Object.class) != null);
+        assertNotNull(SimpleLocator.get(Object.class));
     }
 
     @Test
@@ -43,7 +45,7 @@ public class BaseRegistrationTypesTest {
         SimpleLocator.register(MyInterface.class, MyConcreteA::new);
         MyInterface one = SimpleLocator.get(MyInterface.class);
         MyInterface two = SimpleLocator.get(MyInterface.class);
-        assertTrue(one != two);
+        assertNotSame(one, two);
     }
 
     @Test(expected = IllegalArgumentException.class)

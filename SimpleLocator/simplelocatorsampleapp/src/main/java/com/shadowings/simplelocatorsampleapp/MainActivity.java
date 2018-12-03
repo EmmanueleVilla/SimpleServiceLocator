@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
 
     private TextView messageTextView;
+    private TextView namedOneTextView;
+    private TextView namedTwoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +23,11 @@ public class MainActivity extends AppCompatActivity {
 
         messageTextView = findViewById(R.id.message_textView);
         messageTextView.setText(mainViewModel.getMessage());
+
+        namedOneTextView = findViewById(R.id.namedOne_textView);
+        namedOneTextView.setText(mainViewModel.getNamedOne());
+
+        namedTwoTextView = findViewById(R.id.namedTwo_textView);
+        namedTwoTextView.setText(mainViewModel.getNamedTwo());
     }
 }

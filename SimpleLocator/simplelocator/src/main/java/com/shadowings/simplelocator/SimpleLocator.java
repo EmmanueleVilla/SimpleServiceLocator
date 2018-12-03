@@ -17,17 +17,32 @@ public class SimpleLocator {
      * The instance of the class registered in the simple locator associated with the requested type
      */
     public static <T> T get(Class<T> type) throws IllegalArgumentException {
-        if(isBaseRegistered(type))
+        return get(type, null);
+    }
+
+    /**
+     * Retrieve an istance of the class associated with the given type
+     * @param type
+     * The type of the class needed
+     * @param <T>
+     * The type of the class needed
+     * @param name
+     * The name of the class needed
+     * @return
+     * The instance of the class registered in the simple locator associated with the requested type
+     */
+    public static <T> T get(Class<T> type, String name) throws IllegalArgumentException {
+        if(isBaseRegistered(type, name))
         {
-            return baseGet(type);
+            return baseGet(type, name);
         }
 
-        if(isSingletonRegistered(type))
+        if(isSingletonRegistered(type, name))
         {
-            return singletonGet(type);
+            return singletonGet(type, name);
         }
 
-        throw new IllegalArgumentException("Don't know how to create an instance of " + type.getName());
+        throw new IllegalArgumentException("Don't know how to create an instance of " + buildName(type, name));
     }
 
     /**
@@ -40,8 +55,23 @@ public class SimpleLocator {
      * The type to be registered
      */
     public static <T> void register(Class<T> type, ObjectFactory<T> factory) {
-        unregister(type);
-        factoriesMap.put(type.getName(), factory);
+        register(type, null, factory);
+    }
+
+    /**
+     * Register the factory to create an instance when the given type and name is requested
+     * @param type
+     * The type to be registered
+     * @param type
+     * The name of the type to be registered
+     * @param factory
+     * The method to create an istance of the type needed
+     * @param <T>
+     * The type to be registered
+     */
+    public static <T> void register(Class<T> type, String name, ObjectFactory<T> factory) {
+        unregister(type, name);
+        factoriesMap.put(buildName(type, name), factory);
     }
 
     /**
@@ -54,8 +84,8 @@ public class SimpleLocator {
      * The type to be registered
      */
     public static <T> void registerSingleton(Class<T> type, ObjectFactory<T> factory) {
-        unregister(type);
-        singletonsMap.put(type.getName(), factory.build());
+        unregister(type, null);
+        singletonsMap.put(buildName(type, null), factory.build());
     }
 
     /**
@@ -66,7 +96,11 @@ public class SimpleLocator {
      * The type to be unregistered
      */
     public static <T> void unregister(Class<T> type) {
-        String key = type.getName();
+        unregister(type, null);
+    }
+
+    public static <T> void unregister(Class<T> type, String name) {
+        String key = buildName(type, name);
         factoriesMap.remove(key);
         singletonsMap.remove(key);
     }
@@ -102,23 +136,43 @@ public class SimpleLocator {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T baseGet(Class<T> type) {
-        ObjectFactory<T> factory = (ObjectFactory<T>) factoriesMap.get(type.getName());
+    private static <T> T baseGet(Class<T> type, String name) {
+        ObjectFactory<T> factory = (ObjectFactory<T>) factoriesMap.get(buildName(type, name));
         return factory.build();
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T singletonGet(Class<T> type) {
-        return (T)singletonsMap.get(type.getName());
+        return singletonGet(type, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T singletonGet(Class<T> type, String name) {
+        return (T)singletonsMap.get(buildName(type, name));
     }
 
     private static <T> boolean isBaseRegistered(Class<T> type) {
-        String key = type.getName();
-        return factoriesMap.containsKey(key);
+        return isBaseRegistered(type, null);
+    }
+
+    private static <T> boolean isBaseRegistered(Class<T> type, String name) {
+        return factoriesMap.containsKey(buildName(type, name));
     }
 
     private static <T> boolean isSingletonRegistered(Class<T> type) {
-        String key = type.getName();
-        return singletonsMap.containsKey(key);
+        return isSingletonRegistered(type, null);
+    }
+
+    private static <T> boolean isSingletonRegistered(Class<T> type, String name) {
+        return singletonsMap.containsKey(buildName(type, name));
+    }
+
+    private static <T> String buildName(Class<T> type, String name)
+    {
+        if(name == null)
+        {
+            name = "";
+        }
+        return type.getName() + "_" + name;
     }
 }

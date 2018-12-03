@@ -28,4 +28,12 @@ public class MainViewModel {
         //we are executing the concrete class from the other module without depend on it!
         return this.mySampleInterface.getMessage();
     }
+
+    public String getNamedOne() {
+        return SimpleLocator.get(String.class, "FirstName");
+    }
+
+    public String getNamedTwo() {
+        return SimpleLocator.get(String.class, "SecondName");
+    }
 }
