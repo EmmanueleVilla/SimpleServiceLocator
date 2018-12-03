@@ -83,6 +83,25 @@ SimpleLocator.registerSingleton(
 ```
 In this way, SimpleLocator will always return the same instance of MySampleConcreteClass
 
+### Register with names
+You can also pass a name when registering to register constants:
+```
+SimpleLocator.register(
+    String.class, 
+    "FirstName", 
+    () -> "This is the first name string"
+);
+
+SimpleLocator.register(
+    String.class, 
+    "SecondName", 
+    () -> "This is the second name string"
+);
+
+SimpleLocator.get(String.class, "FirstName"); //contains "This is the first name string"
+SimpleLocator.get(String.class, "SecondName"); //contains "This is the second name string"
+```
+
 ### Multiple Registration
 If you register the same class more times, SimpleLocator will consider only the last one
 ```
