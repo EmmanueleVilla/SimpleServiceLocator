@@ -148,20 +148,7 @@ public class MainViewModel {
 
     private MySampleInterface mySampleInterface;
 
-    //use the empty constructor in the application to take the dependencies from SimpleLocator
-    public MainViewModel()
-    {
-        InitDependencies(SimpleLocator.get(MySampleInterface.class));
-    }
-
-    //use the explicit constructor in the application tests to mock the class dependencies
-    public MainViewModel(MySampleInterface mySampleInterface)
-    {
-        InitDependencies(mySampleInterface);
-    }
-
-    private void InitDependencies(MySampleInterface mySampleInterface)
-    {
+    public void setMySampleInterface(MySampleInterface mySampleInterface) {
         this.mySampleInterface = mySampleInterface;
     }
 
@@ -172,7 +159,24 @@ public class MainViewModel {
     }
 }
 ```
-
+Then, register the rules like this:
+```
+SimpleLocator.register(MySampleInterface.class, MySampleConcreteClass::new);
+SimpleLocator.register(MainViewModel.class, () -> {
+    MainViewModel viewModel = new MainViewModel();
+    viewModel.setMySampleInterface(SimpleLocator.get(MySampleInterface.class));
+    return viewModel;
+});
+```
+In this way, you can create the MainViewModel instance by simply calling:
+```
+MainViewModel mainViewModel = SimpleLocator.get(MainViewModel.class);
+```
+While in the unit tests, you will create it like this:
+```
+MainViewModel viewModel = new MainViewModel();
+viewModel.setMySampleInterface(MySampleInterfaceMockForUnitTests);
+```
 The sample app within the repository gives an example of this project structure:
 
 ![SampleApp](https://scontent-mxp1-1.xx.fbcdn.net/v/t1.0-9/42394639_10217915313382636_4814971922968215552_n.jpg?_nc_cat=103&oh=8026cef86509d9ef7a7ef347247bd814&oe=5C284B0D)
