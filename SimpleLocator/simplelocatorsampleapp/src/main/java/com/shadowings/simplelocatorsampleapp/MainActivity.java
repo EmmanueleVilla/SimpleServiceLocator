@@ -5,29 +5,24 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.shadowings.core.MainViewModel;
+import com.shadowings.simplelocator.SimpleLocator;
 
 public class MainActivity extends AppCompatActivity {
-
-    private MainViewModel mainViewModel;
-
-    private TextView messageTextView;
-    private TextView namedOneTextView;
-    private TextView namedTwoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainViewModel = new MainViewModel();
+        MainViewModel mainViewModel = SimpleLocator.get(MainViewModel.class);
 
-        messageTextView = findViewById(R.id.message_textView);
+        TextView messageTextView = findViewById(R.id.message_textView);
         messageTextView.setText(mainViewModel.getMessage());
 
-        namedOneTextView = findViewById(R.id.namedOne_textView);
+        TextView namedOneTextView = findViewById(R.id.namedOne_textView);
         namedOneTextView.setText(mainViewModel.getNamedOne());
 
-        namedTwoTextView = findViewById(R.id.namedTwo_textView);
+        TextView namedTwoTextView = findViewById(R.id.namedTwo_textView);
         namedTwoTextView.setText(mainViewModel.getNamedTwo());
     }
 }
