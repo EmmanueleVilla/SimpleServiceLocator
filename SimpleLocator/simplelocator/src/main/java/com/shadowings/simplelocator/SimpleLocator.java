@@ -1,11 +1,13 @@
 package com.shadowings.simplelocator;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SimpleLocator {
 
     private static HashMap<String, ObjectFactory<?>> factoriesMap = new HashMap<>();
-    private static HashMap<String, Object> singletonsMap = new HashMap<>();
+    private static HashMap<String, Object> singletonsBuiltMap = new HashMap<>();
+    private static HashMap<String, ObjectFactory<?>> singletonsMap = new HashMap<>();
 
     /**
      * Retrieve an istance of the class associated with the given type
@@ -85,7 +87,7 @@ public class SimpleLocator {
      */
     public static <T> void registerSingleton(Class<T> type, ObjectFactory<T> factory) {
         unregister(type, null);
-        singletonsMap.put(buildName(type, null), factory.build());
+        singletonsMap.put(buildName(type, null), factory);
     }
 
     /**
@@ -95,14 +97,15 @@ public class SimpleLocator {
      * @param <T>
      * The type to be unregistered
      */
-    public static <T> void unregister(Class<T> type) {
+    static <T> void unregister(Class<T> type) {
         unregister(type, null);
     }
 
-    public static <T> void unregister(Class<T> type, String name) {
+    private static <T> void unregister(Class<T> type, String name) {
         String key = buildName(type, name);
         factoriesMap.remove(key);
         singletonsMap.remove(key);
+        singletonsBuiltMap.remove(key);
     }
 
     /**
@@ -114,14 +117,14 @@ public class SimpleLocator {
      * @return
      * True if the given type is registered, false otherwise
      */
-    public static <T> boolean isRegistered(Class<T> type) {
+    static <T> boolean isRegistered(Class<T> type) {
         return isBaseRegistered(type) || isSingletonRegistered(type);
     }
 
     /**
      * Removes all the registration from the locator
      */
-    public static void clear() {
+    static void clear() {
         factoriesMap.clear();
         singletonsMap.clear();
     }
@@ -131,14 +134,14 @@ public class SimpleLocator {
      * @return
      * An integer representing the number of the registered classes
      */
-    public static int getRegistrationCount() {
+    static int getRegistrationCount() {
         return factoriesMap.size() + singletonsMap.size();
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T baseGet(Class<T> type, String name) {
         ObjectFactory<T> factory = (ObjectFactory<T>) factoriesMap.get(buildName(type, name));
-        return factory.build();
+        return Objects.requireNonNull(factory).build();
     }
 
     @SuppressWarnings("unchecked")
@@ -148,7 +151,13 @@ public class SimpleLocator {
 
     @SuppressWarnings("unchecked")
     private static <T> T singletonGet(Class<T> type, String name) {
-        return (T)singletonsMap.get(buildName(type, name));
+        String key = buildName(type, name);
+        if(!singletonsBuiltMap.containsKey(key)) {
+            ObjectFactory<T> factory = (ObjectFactory<T>)singletonsMap.get(key);
+            Object built = Objects.requireNonNull(factory).build();
+            singletonsBuiltMap.put(key, built);
+        }
+        return (T)singletonsBuiltMap.get(key);
     }
 
     private static <T> boolean isBaseRegistered(Class<T> type) {

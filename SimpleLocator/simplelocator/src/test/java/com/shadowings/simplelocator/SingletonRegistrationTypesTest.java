@@ -3,9 +3,14 @@ package com.shadowings.simplelocator;
 import com.shadowings.simplelocator.mocks.MyConcreteA;
 import com.shadowings.simplelocator.mocks.MyConcreteB;
 import com.shadowings.simplelocator.mocks.MyInterface;
+import com.shadowings.simplelocator.mocks.MyOtherConcreteA;
+import com.shadowings.simplelocator.mocks.MyOtherInterface;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class SingletonRegistrationTypesTest {
@@ -15,7 +20,8 @@ public class SingletonRegistrationTypesTest {
     {
         SimpleLocator.clear();
         SimpleLocator.registerSingleton(Object.class, Object::new);
-        assertTrue(SimpleLocator.get(Object.class) != null);
+        Object obj = SimpleLocator.get(Object.class);
+        assertNotNull(obj);
     }
 
     @Test
@@ -32,7 +38,10 @@ public class SingletonRegistrationTypesTest {
         SimpleLocator.clear();
         SimpleLocator.registerSingleton(MyInterface.class, MyConcreteA::new);
         SimpleLocator.registerSingleton(MyInterface.class, MyConcreteB::new);
-        assertTrue(SimpleLocator.get(MyInterface.class) instanceof MyConcreteB);
+        MyInterface obj = SimpleLocator.get(MyInterface.class);
+        assertNotNull(obj);
+        assertFalse(obj instanceof MyConcreteA);
+        assertTrue(obj instanceof MyConcreteB);
     }
 
     @Test
@@ -42,7 +51,19 @@ public class SingletonRegistrationTypesTest {
         SimpleLocator.registerSingleton(MyInterface.class, MyConcreteA::new);
         MyInterface one = SimpleLocator.get(MyInterface.class);
         MyInterface two = SimpleLocator.get(MyInterface.class);
-        assertTrue(one == two);
+        assertSame(one, two);
+    }
+
+    @Test
+    public void registerSingletonIsLazy()
+    {
+        SimpleLocator.clear();
+        SimpleLocator.registerSingleton(MyInterface.class, () -> {
+            MyConcreteA a = new MyConcreteA();
+            a.setMyOtherInterface(SimpleLocator.get(MyOtherInterface.class));
+            return a;
+        });
+        SimpleLocator.register(MyOtherInterface.class, MyOtherConcreteA::new);
     }
 
     @Test(expected = IllegalArgumentException.class)
